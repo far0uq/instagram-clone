@@ -1,0 +1,17 @@
+.signup-form {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 20vw;
+  margin: auto;
+}
+
+.signup-form > input {
+  padding: 20px;
+}
+
+.signup-form > input[type="submit"] {
+  background-color: rgb(0, 176, 229);
+  color: white;
+}

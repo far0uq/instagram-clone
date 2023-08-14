@@ -1,0 +1,26 @@
+Things to look out for:
+
+1. Dockerize the application side-by-side.
+2. Git Branch for every feature.
+3. Careful naming convention ~ use Prettier and ESLint.
+4. Review commit changes before committing them.
+5. Manage the README.md
+->  instructions on how to run and add system dependencies
+-> env vars etc(keep it updated as you add dependencies).
+-> Readme should also list any and all assumptions
+6. Write some seed data to help run the app for the first time(if anyone clones and runs the app).
+
+Dependencies:
+
+1. mongoose -> ODM
+2. bcrypt -> Encryption for Passwords
+3. express -> backend node framework
+4. express-validator -> sanitize inputs etc.
+5. config -> easily manage global config data
+6. passport & JWT -> authentication
+7. cloudinary -> image storage
+
+DevDependencies:
+
+1. nodemon -> keeps watching our server [No need to install as included in node v18, --watch]
+2. concurrently -> run backend and frontend server at the same time.
