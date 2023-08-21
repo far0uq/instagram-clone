@@ -17,8 +17,10 @@ Dependencies:
 3. express -> backend node framework
 4. express-validator -> sanitize inputs etc.
 5. config -> easily manage global config data
-6. passport & JWT -> authentication
-7. cloudinary -> image storage
+6. passport.js -> authentication middleware
+7. JWT -> mechanism for authentication
+8. cloudinary -> image storage
+9. dotenv -> for loading configuration data from .env
 
 DevDependencies:
 
