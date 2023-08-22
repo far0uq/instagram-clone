@@ -3,11 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import * as Yup from "yup";
-import axios from "axios";
 
 import "./AuthForm.css";
 import instagram_logo from "../../assets/instagram_logo.png";
-import { handleTokenValidation } from "../../api/userAPI";
+import { handleResetPassword, handleTokenValidation } from "../../api/userAPI";
 
 function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -43,12 +42,7 @@ function ResetPasswordPage() {
     onSubmit: async (values) => {
       try {
         if (values.password === values.confirm_password) {
-          //const response =
-          const response = await axios.post(
-            `http://127.0.0.1:5000/api/reset-password/${token}`,
-            values
-          );
-          const data = response.data;
+          const data = await handleResetPassword(values, token);
           if (data.status === "ok") {
             toast.success("Password reset successfully.");
             setTimeout(() => {

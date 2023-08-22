@@ -1,11 +1,11 @@
 import { useFormik } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import "./AuthForm.css";
 import instagram_logo from "../../assets/instagram_logo.png";
+import { handleForgotPassword } from "../../api/userAPI";
 
 function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -23,12 +23,7 @@ function ForgotPasswordPage() {
     }),
     onSubmit: async (values) => {
       try {
-        //const response =
-        const response = await axios.post(
-          "http://127.0.0.1:5000/api/forgot-password",
-          values
-        );
-        const data = response.data;
+        const data = await handleForgotPassword(values);
         if (data.status === "ok") {
           toast.success("Email Sent!");
           formik.values.email = "";
