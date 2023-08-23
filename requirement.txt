@@ -21,6 +21,7 @@ Dependencies:
 7. JWT -> mechanism for authentication
 8. cloudinary -> image storage
 9. dotenv -> for loading configuration data from .env
+10. Bootstrap -> Styling
 
 DevDependencies:
 

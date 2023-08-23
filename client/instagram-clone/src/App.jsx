@@ -1,10 +1,15 @@
 import { Routes, Route } from "react-router-dom";
+// Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+// Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import SignUp from "./pages/auth/SignUp";
 import Dummy from "./pages/test/dummy";
 import SignIn from "./pages/auth/SignIn";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import MainPage from "./pages/main/MainPage";
 
 function App() {
   {
@@ -21,6 +26,7 @@ function App() {
           path="/reset-password/:token"
           element={<ResetPasswordPage />}
         ></Route>
+        <Route path="/mp" element={<MainPage />}></Route>
       </Routes>
     </>
   );

@@ -1,0 +1,42 @@
+.profile aside img {
+  border-radius: 50%;
+  width: 145px;
+  height: auto;
+}
+
+.profile {
+  width: 55%;
+  border-bottom: 1px rgb(51, 51, 51) solid;
+  margin: auto;
+  padding: 35px 0px;
+}
+
+.profile img {
+  margin-left: 90px;
+  box-sizing: border-box;
+}
+
+.profile-stats {
+  padding-left: 60px;
+  box-sizing: border-box;
+  width: 44%;
+  color: white;
+}
+
+.profile-stats ul {
+  list-style-type: none;
+}
+
+.profile-stats li:nth-child(1) {
+  font-size: 20.5px;
+  padding-bottom: 10px;
+}
+
+.profile-stats li:nth-child(2) {
+  font-size: 16px;
+}
+
+.profile-stats li:nth-child(3) {
+  font-size: 14px;
+  font-weight: bold;
+}
