@@ -17,4 +17,7 @@ router.post("/reset-password/:token", userController.resetPassword);
 // * token-validation
 router.post("/token-validation/:token", userController.tokenValidation);
 
+// * token-validation
+router.post("/image-upload", userController.imageUpload);
+
 module.exports = router;

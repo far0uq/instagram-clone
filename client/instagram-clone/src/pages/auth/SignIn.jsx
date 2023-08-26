@@ -52,9 +52,9 @@ function SignIn() {
           onBlur={formik.handleBlur}
           value={formik.values.email}
         />
-        {formik.errors.email && formik.touched.email ? (
+        {formik.errors.email && formik.touched.email && (
           <p>{formik.errors.email}</p>
-        ) : null}
+        )}
         <input
           type="password"
           name="password"
@@ -63,9 +63,9 @@ function SignIn() {
           onBlur={formik.handleBlur}
           value={formik.values.password}
         />
-        {formik.errors.password && formik.touched.password ? (
+        {formik.errors.password && formik.touched.password && (
           <p>{formik.errors.password}</p>
-        ) : null}
+        )}
         <p style={{ color: "blue" }}>
           <Link to="/forgot-password">Forgot Password</Link>
         </p>

@@ -1,9 +1,11 @@
-import UserProfile from "../../components/UserProfile";
+import UserProfile from "../../components/UserProfile/UserProfile";
 
 function UserProfilePage() {
-  return <>
-  <UserProfile/>
-  </>;
+  return (
+    <>
+      <UserProfile />
+    </>
+  );
 }
 
 export default UserProfilePage;
