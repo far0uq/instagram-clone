@@ -8,7 +8,7 @@ client/yarn-error.log*
 client/pnpm-debug.log*
 client/lerna-debug.log*
 
-client/node_modules
+client/node_modules/
 client/dist
 client/dist-ssr
 client/*.local
@@ -25,7 +25,7 @@ client/*.local
 *.sw?
 
 # SERVER
-server/node_modules
+server/node_modules/
 
 #OTHER
 requirement.txt
