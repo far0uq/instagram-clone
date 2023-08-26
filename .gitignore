@@ -1,17 +1,17 @@
 #CLIENT
 # Logs
-client/logs
-client/*.log
-client/npm-debug.log*
-client/yarn-debug.log*
-client/yarn-error.log*
-client/pnpm-debug.log*
-client/lerna-debug.log*
+client/instagram-clone/logs
+client/instagram-clone/*.log
+client/instagram-clone/npm-debug.log*
+client/instagram-clone/yarn-debug.log*
+client/instagram-clone/yarn-error.log*
+client/instagram-clone/pnpm-debug.log*
+client/instagram-clone/lerna-debug.log*
 
-client/node_modules/
-client/dist
-client/dist-ssr
-client/*.local
+client/instagram-clone/node_modules/
+client/instagram-clone/dist
+client/instagram-clone/dist-ssr
+client/instagram-clone/*.local
 
 # Editor directories and files
 .vscode/*
