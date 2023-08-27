@@ -21,7 +21,7 @@ export async function handleSignIn(values) {
     return false;
   } catch (err) {
     throw new Error(
-      "ERROR: sign up failed due to server connection issue. Could not establish connection to the server."
+      "Sign up failed due to server connection issue. Could not establish connection to the server."
     );
   }
 }
@@ -36,7 +36,7 @@ export async function handleSignUp(values) {
     return false;
   } catch (err) {
     throw new Error(
-      "ERROR: login failed due to server connection issue. Could not establish connection to the server."
+      "Login failed due to server connection issue. Could not establish connection to the server."
     );
   }
 }
@@ -54,7 +54,7 @@ export async function handleResetPassword(values, token) {
     return false;
   } catch (err) {
     throw new Error(
-      "ERROR: could not validate you due to failed server connection. Could not establish connection to the server."
+      "Could not validate you due to failed server connection. Could not establish connection to the server."
     );
   }
 }
@@ -72,21 +72,19 @@ export async function handleForgotPassword(values) {
     return false;
   } catch (err) {
     throw new Error(
-      "ERROR: there was an error in trying to reach your email. Could not establish connection to the server."
+      "There was an error in trying to reach your email. Could not establish connection to the server."
     );
   }
 }
 
 export async function handleImageUpload(imageToUpload) {
   try {
-    const response = await axios.post(
-      `${API_URL}/user/image-upload`,
-      imageToUpload
-    );
+    const values = { image: imageToUpload };
+    const response = await axios.post(`${API_URL}/user/image-upload`, values);
     return response.data;
   } catch (err) {
     throw new Error(
-      "ERROR: Image upload failed. Could not establish connection to the server."
+      "Image upload failed. Could not establish connection to the server."
     );
   }
 }

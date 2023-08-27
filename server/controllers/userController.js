@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
-const cloudinaryConn = require("../utils/cloudinaryConn.js");
+const cloudinary = require("../utils/cloudinaryConn.js");
 
 const userController = {
   signup: async (req, res) => {
@@ -143,10 +143,44 @@ const userController = {
     }
   },
   imageUpload: async (req, res) => {
-    const { imageToUpload } = req.body;
-    const uploadedResp = await cloudinaryConn.uploader.upload(imageToUpload, {
-      upload_preset: "images",
-    });
+    try {
+      const imageToUpload = req.body.image;
+
+      const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
+        folder: "user_profile_images",
+        upload_preset: "user_images",
+      });
+
+      return res.json({ status: 201, message: "Image Uploaded Successfully" });
+    } catch (err) {
+      return res.json({
+        status: 404,
+        message: "Could not connect to the host.",
+      });
+    }
+  },
+  imageUpload: async (req, res) => {
+    try {
+      const postToUpload = req.body.post;
+      console.log(
+        "🚀 ~ file: userController.js:165 ~ imageUpload: ~ postToUpload:",
+        postToUpload
+      );
+
+      foreach(async (imageToUpload) => {
+        const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
+          folder: "post_images",
+          upload_preset: "user_images",
+        });
+      });
+
+      return res.json({ status: 201, message: "Post Uploaded Successfully" });
+    } catch (err) {
+      return res.json({
+        status: 404,
+        message: "Could not connect to the host.",
+      });
+    }
   },
 };
 

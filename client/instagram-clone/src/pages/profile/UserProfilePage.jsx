@@ -1,9 +1,11 @@
-import UserProfile from "../../components/UserProfile/UserProfile";
+import UserProfileHeader from "../../components/user/UserProfileHeader.jsx";
+import EmptyPostSection from "../../components/user/EmptyPostSection.jsx"
 
 function UserProfilePage() {
   return (
     <>
-      <UserProfile />
+      <UserProfileHeader />
+      <EmptyPostSection />
     </>
   );
 }

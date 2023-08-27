@@ -13,6 +13,7 @@
 
 .main-body aside ul {
   padding-left: 0px;
+  list-style-type: none;
 }
 
 .main-body aside ul li:last-child {

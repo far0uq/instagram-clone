@@ -1,9 +1,9 @@
-import "./UserProfile.css";
+import "./UserProfileHeader.css";
 import { useRef, useState, useEffect } from "react";
 import default_user from "../../assets/icons/default_user.jpg";
 import { handleImageUpload } from "../../api/userAPI";
 
-function UserProfile() {
+function UserProfileHeader() {
   const imageUploadRef = useRef(null);
   const [currentImage, setCurrentImage] = useState("");
 
@@ -69,4 +69,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default UserProfileHeader;
