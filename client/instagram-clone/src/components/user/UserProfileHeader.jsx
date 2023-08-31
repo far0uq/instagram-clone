@@ -1,11 +1,21 @@
 import "./UserProfileHeader.css";
 import { useRef, useState, useEffect } from "react";
 import default_user from "../../assets/icons/default_user.jpg";
-import { handleImageUpload } from "../../api/userAPI";
+import {
+  handleProfileImageUpload,
+  fetchProfileInfo,
+  fetchProfilePicture,
+} from "../../api/userAPI";
+import { ToastContainer, toast } from "react-toastify";
 
 function UserProfileHeader() {
   const imageUploadRef = useRef(null);
-  const [currentImage, setCurrentImage] = useState("");
+  const [followers, setFollowers] = useState("");
+  const [following, setFollowing] = useState("");
+  const [username, setUsername] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [postCount, setPostCount] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null);
 
   const triggerImageUpload = () => {
     imageUploadRef.current.click();
@@ -20,39 +30,67 @@ function UserProfileHeader() {
     const reader = new FileReader();
     reader.readAsDataURL(profilePic);
     reader.onloadend = () => {
-      setCurrentImage(reader.result);
+      setProfilePicture(reader.result);
     };
   };
 
   useEffect(() => {
-    if (currentImage) {
-      handleImageUpload(currentImage);
+    if (profilePicture) {
+      handleProfileImageUpload(profilePicture);
     }
-  }, [currentImage]);
+  }, [profilePicture]); // TODO: Profile pic show
+
+  useEffect(() => {
+    const setUserInfo = async () => {
+      const image_data = await fetchProfilePicture();
+      if (image_data.status === 200) {
+        setProfilePicture(image_data.display_picture);
+      } else {
+        toast.error(data.message);
+      }
+
+      const data = await fetchProfileInfo();
+      if (data.status === 200) {
+        setUsername(data.username);
+        setFullname(data.fullname);
+        setFollowers(data.followers);
+        setFollowing(data.following);
+        setPostCount(data.postCount);
+      } else {
+        toast.error(data.message);
+      }
+    };
+    setUserInfo();
+  }, []);
 
   return (
     <div className="profile d-flex">
+      <ToastContainer />
       <aside>
-        <img src={default_user} onClick={triggerImageUpload} />
+        {profilePicture ? (
+          <img src={profilePicture} onClick={triggerImageUpload} />
+        ) : (
+          <img src={default_user} onClick={triggerImageUpload} />
+        )}
       </aside>
       <section className="profile-stats">
         <ul>
           <li>
-            <p>[Username]</p>
+            <p>{username}</p>
           </li>
           <li className="d-flex justify-content-between">
             <p>
-              <b>0</b> posts
+              <b>{postCount}</b> posts
             </p>
             <p>
-              <b>0</b> followers
+              <b>{followers}</b> followers
             </p>
             <p>
-              <b>0</b> following
+              <b>{following}</b> following
             </p>
           </li>
           <li>
-            <p>[Fullname]</p>
+            <p>{fullname}</p>
           </li>
         </ul>
       </section>

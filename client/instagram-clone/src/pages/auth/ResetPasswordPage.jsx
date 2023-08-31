@@ -13,9 +13,13 @@ function ResetPasswordPage() {
   const { token } = useParams();
 
   useEffect(() => {
-    if (handleTokenValidation(token) === 401) {
-      navigate("/");
-    }
+    const validateToken = async () => {
+      const data = await handleTokenValidation(token);
+      if (data.status === 401) {
+        navigate("/");
+      }
+    };
+    validateToken();
   }, []);
 
   const formik = useFormik({

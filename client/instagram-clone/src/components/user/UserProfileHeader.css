@@ -1,7 +1,8 @@
 .profile aside img {
   border-radius: 50%;
   width: 145px;
-  height: auto;
+  height: 145px;
+  object-fit: cover;
 }
 
 .profile {

@@ -1,83 +1,130 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./PostsForm.css";
 import { ToastContainer, toast } from "react-toastify";
 import { handlePostUpload } from "../../api/postAPI";
+import PropTypes from "prop-types";
+import back_icon from "../../assets/icons/arrow_icon30.png";
+import empty_form_icon from "../../assets/icons/emptyform_icon.png";
 
-function PostsForm() {
+function PostsForm({ onClose }) {
   const imageUploadRef = useRef(null);
-  const [postList, setPostList] = useState([]);
-  const [postsChanged, setPostChanged] = useState(false);
+  const [postList, setPostList] = useState(null);
 
   const triggerImageWindow = () => {
     imageUploadRef.current.click();
   };
 
   const handleInputChange = (e) => {
-    if (e.target.files.length + postList.length > 10) {
-      toast.error("Can only add 10 images to a post.");
-    } else {
-      const filesArray = [...e.target.files];
+    const filesArray = [...e.target.files];
 
-      let postListOld = [...postList];
+    let postListOld = postList ? [...postList] : null;
 
-      filesArray.forEach((file) => {
-        const reader = new FileReader();
+    const imagePromises = [];
+
+    filesArray.forEach((file) => {
+      const reader = new FileReader();
+      const imageFilePromise = new Promise((resolve) => {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
-          postListOld.push(reader.result);
+          resolve(reader.result);
         };
       });
-      setPostList(postListOld);
-    }
-  };
+      imagePromises.push(imageFilePromise);
+    });
 
-  const triggerPostUpload = () => {
-    handlePostUpload(postList);
+    Promise.all(imagePromises)
+      .then((values) => {
+        postListOld = postList ? [...postListOld, ...values] : [...values];
+        setPostList(postListOld);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   };
+  // TODO: Fix why change in state is not causing a re-render
 
-  useEffect(() => {
-    postsChanged ? setPostChanged(false) : setPostChanged(true);
+  const triggerPostUpload = async () => {
+    const data = await handlePostUpload(postList);
     console.log(
-      "🚀 ~ file: PostsForm.jsx:35 ~ useEffect ~ postsChanged:",
-      postsChanged
+      "🚀 ~ file: PostsForm.jsx:48 ~ triggerPostUpload ~ data:",
+      data
     );
-  }, [postList]);
+    if (data.status === 201) toast.success("Post Made!");
+    else toast.error("Could not make post, please try again in a bit.");
+    onClose();
+  };
 
   const blankifyImageSelect = (event) => {
     event.target.value = "";
   };
 
+  const removeImage = (index) => {
+    const postListModified = [...postList];
+    postListModified.splice(index, 1);
+    setPostList(postListModified);
+  };
+
   return (
-    <div className="post-form">
-      <ToastContainer />
-      <h1>Create new post</h1>
-      <hr></hr>
+    <>
+      <div className="overlay" />
+      <div className="post-form">
+        <ToastContainer />
+        <h1>Create new post</h1>
+        <hr></hr>
 
-      <section>
-        {console.log("UPDATED VALUE")};
-        {console.log(
-          "🚀 ~ file: PostsForm.jsx:58 ~ {postList.map ~ postList:",
-          postList
+        {!postList && (
+          <div style={{ display: "block" }}>
+            <img id="empty-form-icon" src={empty_form_icon} />
+          </div>
         )}
-        {postList.map((postImage, index) => {
-          return <img key={index} src={postImage} />;
-        })}
-      </section>
 
-      <button onClick={triggerImageWindow}>Select from Computer</button>
-      <button onClick={triggerPostUpload}>Post</button>
+        <section className="post-images d-flex justify-content-around">
+          {postList &&
+            postList.map((postImage, index) => {
+              return (
+                <img
+                  key={index}
+                  src={postImage}
+                  onClick={() => removeImage(index)}
+                />
+              );
+            })}
+        </section>
 
-      <input
-        type="file"
-        ref={imageUploadRef}
-        accept=".jpg, .jpeg, .png"
-        style={{ display: "none" }}
-        multiple="multiple"
-        onChange={handleInputChange}
-        onClick={blankifyImageSelect}
-      />
-    </div>
+        <section className="button-section d-flex justify-content-between">
+          <div onClick={onClose}>
+            <img src={back_icon}></img>
+          </div>
+          <button
+            className="select-button post-button"
+            onClick={triggerImageWindow}
+          >
+            Select from Computer
+          </button>
+          <button
+            className="post-button submit-button"
+            onClick={triggerPostUpload}
+          >
+            Post
+          </button>
+        </section>
+
+        <input
+          type="file"
+          ref={imageUploadRef}
+          accept=".jpg, .jpeg, .png"
+          style={{ display: "none" }}
+          multiple="multiple"
+          onChange={handleInputChange}
+          onClick={blankifyImageSelect}
+        />
+      </div>
+    </>
   );
 }
 
 export default PostsForm;
+
+PostsForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};

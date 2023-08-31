@@ -8,7 +8,8 @@
 .main-body {
   background-color: black;
   height: 100vh;
-  width: auto;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .main-body aside ul {
@@ -17,7 +18,7 @@
 }
 
 .main-body aside ul li:last-child {
-  margin-top: 750px;
+  margin-top: 510px;
 }
 
 .main-body > aside {

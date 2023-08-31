@@ -5,8 +5,7 @@ export async function handleTokenValidation(token) {
   const response = await axios.post(
     `${API_URL}/user/token-validation/${token}`
   );
-  const { result } = response;
-  return result;
+  return response.data;
 }
 
 export async function handleSignIn(values) {
@@ -77,14 +76,42 @@ export async function handleForgotPassword(values) {
   }
 }
 
-export async function handleImageUpload(imageToUpload) {
+export async function handleProfileImageUpload(imageToUpload) {
   try {
     const values = { image: imageToUpload };
-    const response = await axios.post(`${API_URL}/user/image-upload`, values);
+    const token = localStorage.getItem("token");
+    const response = await axios.post(
+      `${API_URL}/user/profile-image-upload/${token}`,
+      values
+    );
     return response.data;
   } catch (err) {
     throw new Error(
       "Image upload failed. Could not establish connection to the server."
     );
+  }
+}
+
+export async function fetchProfileInfo() {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post(
+      `${API_URL}/user/fetch-profile-info/${token}`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error("Cannot fetch user info.");
+  }
+}
+
+export async function fetchProfilePicture() {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `${API_URL}/user/fetch-profile-picture/${token}`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error("Cannot fetch user info.");
   }
 }

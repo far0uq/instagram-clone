@@ -1,7 +1,9 @@
-import React from "react";
-
 function UserPostSection() {
-  return <div>UserPostSection</div>;
+  return (
+    <>
+      <button>+</button>{" "}
+    </>
+  );
 }
 
 export default UserPostSection;

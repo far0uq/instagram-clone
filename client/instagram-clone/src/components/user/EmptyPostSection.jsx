@@ -21,8 +21,8 @@ function EmptyPostSection() {
         Share your first photo.
       </button>
 
-      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-        <PostsForm />
+      <Modal open={isOpen}>
+        <PostsForm onClose={() => setIsOpen(false)} />
       </Modal>
     </div>
   );

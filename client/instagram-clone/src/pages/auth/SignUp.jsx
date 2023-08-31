@@ -38,7 +38,7 @@ function SignUp() {
     onSubmit: async (values) => {
       if (await handleSignUp(values)) {
         toast.success("Signup Successful.");
-        navigate("/dummy");
+        navigate("/");
       } else {
         toast.error("A user with that email already exists.");
       }
@@ -96,7 +96,7 @@ function SignUp() {
         )}
         <input type="submit" name="submit" value="Sign Up" />
         <p>
-          Already a user? <Link to="/login">Log in</Link>
+          Already a user? <Link to="/accounts/login">Log in</Link>
         </p>
       </form>
     </>

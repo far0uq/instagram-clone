@@ -32,7 +32,7 @@ function SignIn() {
     onSubmit: async (values) => {
       if (await handleSignIn(values)) {
         toast.success("Login Successful.");
-        navigate("/dummy");
+        navigate("/");
       } else {
         toast.error("Invalid Details. Please Check your details");
       }
@@ -70,7 +70,7 @@ function SignIn() {
           <Link to="/forgot-password">Forgot Password</Link>
         </p>
         <p>
-          Don't have an account? <Link to="/">Sign Up</Link>
+          Don't have an account? <Link to="/accounts/signup">Sign Up</Link>
         </p>
         <input type="submit" name="submit" value="Login" />
       </form>

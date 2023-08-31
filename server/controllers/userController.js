@@ -123,33 +123,50 @@ const userController = {
     }
   },
   tokenValidation: async (req, res) => {
-    const { token } = req.params;
+    try {
+      const { token } = req.params;
 
-    const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
 
-    const emailToFind = payload.email;
+      const emailToFind = payload.email;
 
-    const user = await User.findOne({
-      email: emailToFind,
-    }).exec();
+      const user = await User.findOne({
+        email: emailToFind,
+      }).exec();
 
-    if (user) {
-      return res.json({ status: 200, message: "User has been found." });
-    } else {
+      if (user) {
+        return res.json({ status: 200, message: "User has been found." });
+      } else {
+        return res.json({
+          status: 401,
+          message: "Could not validate user, entry prohibitted.",
+        });
+      }
+    } catch (err) {
       return res.json({
         status: 401,
         message: "Could not validate user, entry prohibitted.",
       });
     }
   },
-  imageUpload: async (req, res) => {
+  profileImageUpload: async (req, res) => {
     try {
       const imageToUpload = req.body.image;
 
+      const { token } = req.params;
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
       const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
         folder: "user_profile_images",
         upload_preset: "user_images",
       });
+
+      const pictureURL = uploadedResp.secure_url;
+      await User.findOneAndUpdate(
+        { email: emailToFind },
+        { display_picture: pictureURL },
+        { new: true }
+      );
 
       return res.json({ status: 201, message: "Image Uploaded Successfully" });
     } catch (err) {
@@ -159,28 +176,43 @@ const userController = {
       });
     }
   },
-  imageUpload: async (req, res) => {
+  // TODO: implement fetchProflePicutre
+  fetchProfileInfo: async (req, res) => {
     try {
-      const postToUpload = req.body.post;
-      console.log(
-        "🚀 ~ file: userController.js:165 ~ imageUpload: ~ postToUpload:",
-        postToUpload
-      );
-
-      foreach(async (imageToUpload) => {
-        const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
-          folder: "post_images",
-          upload_preset: "user_images",
-        });
+      const { token } = req.params;
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
+      const user = await User.findOne({
+        email: emailToFind,
+      }).exec();
+      return res.json({
+        status: 200,
+        followers: user.followers.length,
+        following: user.following.length,
+        username: user.username,
+        fullname: user.fullname,
+        postCount: user.posts.length,
       });
-
-      return res.json({ status: 201, message: "Post Uploaded Successfully" });
     } catch (err) {
       return res.json({
         status: 404,
-        message: "Could not connect to the host.",
+        message: "User profile could not be fetched, not found",
       });
     }
+  },
+  fetchProfilePicture: async (req, res) => {
+    const { token } = req.params;
+    const payload = jwt.decode(token, "f3o2fvmdlleo");
+    const emailToFind = payload.email;
+    const user = await User.findOne({
+      email: emailToFind,
+    }).exec();
+
+    return res.json({
+      status: 200,
+      display_picture: user.display_picture,
+    });
+    // TODO: change the name of the attribute in model from display_picture to profile_picture
   },
 };
 

@@ -22,6 +22,28 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    display_picture: {
+      type: String,
+      required: false,
+    },
+    posts: [
+      {
+        type: String,
+        ref: "post",
+      },
+    ],
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
   },
   { collection: "user" }
 );
