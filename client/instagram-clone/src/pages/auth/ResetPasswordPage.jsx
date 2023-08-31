@@ -13,7 +13,7 @@ function ResetPasswordPage() {
   const { token } = useParams();
 
   useEffect(() => {
-    if (handleTokenValidation(token) === "failed") {
+    if (handleTokenValidation(token) === 401) {
       navigate("/");
     }
   }, []);
@@ -42,8 +42,7 @@ function ResetPasswordPage() {
     onSubmit: async (values) => {
       try {
         if (values.password === values.confirm_password) {
-          const data = await handleResetPassword(values, token);
-          if (data.status === "ok") {
+          if (await handleResetPassword(values, token)) {
             toast.success("Password reset successfully.");
             setTimeout(() => {
               navigate("/login");
@@ -70,9 +69,9 @@ function ResetPasswordPage() {
           onBlur={formik.handleBlur}
           value={formik.values.password}
         />
-        {formik.errors.password && formik.touched.password ? (
+        {formik.errors.password && formik.touched.password && (
           <p>{formik.errors.password}</p>
-        ) : null}
+        )}
         <input
           type="password"
           name="confirm_password"
@@ -81,9 +80,9 @@ function ResetPasswordPage() {
           onBlur={formik.handleBlur}
           value={formik.values.confirm_password}
         />
-        {formik.errors.confirm_password && formik.touched.confirm_password ? (
+        {formik.errors.confirm_password && formik.touched.confirm_password && (
           <p>{formik.errors.confirm_password}</p>
-        ) : null}
+        )}
         <input type="submit" name="submit" value="Save Changes" />
       </form>
     </>

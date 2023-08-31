@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const cloudinary = require("../utils/cloudinaryConn.js");
 
 const userController = {
   signup: async (req, res) => {
@@ -9,7 +10,7 @@ const userController = {
       const user = await User.findOne({ email: req.body.email }).exec();
 
       if (user) {
-        return res.json({ status: "failed" });
+        return res.json({ status: 400, message: "User already exists." });
       } else {
         await User.create({
           email: req.body.email,
@@ -17,10 +18,10 @@ const userController = {
           fullname: req.body.fullname,
           password: req.body.password,
         });
-        return res.json({ status: "ok" });
+        return res.json({ status: 201, message: "User created successfully." });
       }
     } catch (err) {
-      return res.json({ status: "failed" });
+      return res.json({ status: 500, message: "Internal Server Error." });
     }
   },
   login: async (req, res) => {
@@ -38,11 +39,23 @@ const userController = {
           },
           "f3o2fvmdlleo"
         );
-        return res.json({ status: "ok", user: token });
+        return res.json({
+          status: 200,
+          user: token,
+          message: "User logged in successfully.",
+        });
       }
-      return res.json({ status: "error", user: false });
+      return res.json({
+        status: 400,
+        user: false,
+        message: "Invalid Password.",
+      });
     } else {
-      return res.json({ status: "error", user: false });
+      return res.json({
+        status: 400,
+        user: false,
+        message: "User does not exist.",
+      });
     }
   },
   forgotPassword: async (req, res) => {
@@ -61,13 +74,13 @@ const userController = {
         },
       });
 
-      transporter.verify(function (error, success) {
-        if (error) {
-          console.log(error.message);
-        } else {
-          console.log("Server is ready to take our messages");
-        }
-      });
+      // transporter.verify(function (error, success) {
+      //   if (error) {
+      //     console.log(error.message);
+      //   } else {
+      //     console.log("Server is ready to take our messages");
+      //   }
+      // });
 
       const token = jwt.sign({ email: req.body.email }, "f3o2fvmdlleo");
       const encodedJwt = encodeURIComponent(token);
@@ -87,9 +100,9 @@ const userController = {
         }
       });
 
-      res.json({ status: "ok" });
+      res.json({ status: 200, message: "Recovery email sent successfully." });
     } else {
-      res.json({ status: "failed" });
+      res.json({ status: 400, message: "Provided email is invalid." });
     }
   },
   resetPassword: async (req, res) => {
@@ -104,9 +117,9 @@ const userController = {
       { new: true }
     );
     if (user) {
-      return res.json({ status: "ok" });
+      return res.json({ status: 200, message: "Password successfully reset." });
     } else {
-      return res.json({ status: "failed" });
+      return res.json({ status: 400, message: "Password could not be reset." });
     }
   },
   tokenValidation: async (req, res) => {
@@ -121,9 +134,52 @@ const userController = {
     }).exec();
 
     if (user) {
-      return res.json({ status: "ok" });
+      return res.json({ status: 200, message: "User has been found." });
     } else {
-      return res.json({ status: "failed" });
+      return res.json({
+        status: 401,
+        message: "Could not validate user, entry prohibitted.",
+      });
+    }
+  },
+  imageUpload: async (req, res) => {
+    try {
+      const imageToUpload = req.body.image;
+
+      const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
+        folder: "user_profile_images",
+        upload_preset: "user_images",
+      });
+
+      return res.json({ status: 201, message: "Image Uploaded Successfully" });
+    } catch (err) {
+      return res.json({
+        status: 404,
+        message: "Could not connect to the host.",
+      });
+    }
+  },
+  imageUpload: async (req, res) => {
+    try {
+      const postToUpload = req.body.post;
+      console.log(
+        "🚀 ~ file: userController.js:165 ~ imageUpload: ~ postToUpload:",
+        postToUpload
+      );
+
+      foreach(async (imageToUpload) => {
+        const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
+          folder: "post_images",
+          upload_preset: "user_images",
+        });
+      });
+
+      return res.json({ status: 201, message: "Post Uploaded Successfully" });
+    } catch (err) {
+      return res.json({
+        status: 404,
+        message: "Could not connect to the host.",
+      });
     }
   },
 };

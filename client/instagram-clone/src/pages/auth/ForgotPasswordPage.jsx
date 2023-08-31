@@ -23,8 +23,7 @@ function ForgotPasswordPage() {
     }),
     onSubmit: async (values) => {
       try {
-        const data = await handleForgotPassword(values);
-        if (data.status === "ok") {
+        if (await handleForgotPassword(values)) {
           toast.success("Email Sent!");
           formik.values.email = "";
           setTimeout(() => {
@@ -54,9 +53,9 @@ function ForgotPasswordPage() {
           onBlur={formik.handleBlur}
           value={formik.values.email}
         />
-        {formik.errors.email && formik.touched.email ? (
+        {formik.errors.email && formik.touched.email && (
           <p>{formik.errors.email}</p>
-        ) : null}
+        )}
         <input type="submit" name="submit" value="Reset Password" />
       </form>
     </>

@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 //Defining Routes
-app.use("/api/user", userRoutes);
+app.use("/user", userRoutes);
+app.use("/post", postRoutes);
 
 app.listen(5000, () => console.log("Listening on port 5000"));

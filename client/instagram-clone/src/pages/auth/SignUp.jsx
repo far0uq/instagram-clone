@@ -58,9 +58,9 @@ function SignUp() {
           onBlur={formik.handleBlur}
           value={formik.values.email}
         />
-        {formik.errors.email && formik.touched.email ? (
+        {formik.errors.email && formik.touched.email && (
           <p>{formik.errors.email}</p>
-        ) : null}
+        )}
         <input
           type="text"
           name="fullname"
@@ -69,9 +69,9 @@ function SignUp() {
           onBlur={formik.handleBlur}
           value={formik.values.fullname}
         />
-        {formik.errors.fullname && formik.touched.fullname ? (
+        {formik.errors.fullname && formik.touched.fullname && (
           <p>{formik.errors.fullname}</p>
-        ) : null}
+        )}
         <input
           type="text"
           name="username"
@@ -80,9 +80,9 @@ function SignUp() {
           onBlur={formik.handleBlur}
           value={formik.values.username}
         />
-        {formik.errors.username && formik.touched.username ? (
+        {formik.errors.username && formik.touched.username && (
           <p>{formik.errors.username}</p>
-        ) : null}
+        )}
         <input
           type="password"
           name="password"
@@ -91,9 +91,9 @@ function SignUp() {
           onBlur={formik.handleBlur}
           value={formik.values.password}
         />
-        {formik.errors.password && formik.touched.password ? (
+        {formik.errors.password && formik.touched.password && (
           <p>{formik.errors.password}</p>
-        ) : null}
+        )}
         <input type="submit" name="submit" value="Sign Up" />
         <p>
           Already a user? <Link to="/login">Log in</Link>
