@@ -28,7 +28,7 @@ const UserSchema = new Schema(
     },
     posts: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "post",
       },
     ],

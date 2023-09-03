@@ -18,7 +18,7 @@
 }
 
 .main-body aside ul li:last-child {
-  margin-top: 510px;
+  margin-top: 767px;
 }
 
 .main-body > aside {
@@ -26,6 +26,7 @@
   padding-left: 40px;
   height: 100%;
   box-sizing: border-box;
+  position: fixed;
 }
 
 .aside-element {

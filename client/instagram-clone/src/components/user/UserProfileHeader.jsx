@@ -7,8 +7,9 @@ import {
   fetchProfilePicture,
 } from "../../api/userAPI";
 import { ToastContainer, toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-function UserProfileHeader() {
+function UserProfileHeader(postsChanged) {
   const imageUploadRef = useRef(null);
   const [followers, setFollowers] = useState("");
   const [following, setFollowing] = useState("");
@@ -16,6 +17,8 @@ function UserProfileHeader() {
   const [fullname, setFullname] = useState("");
   const [postCount, setPostCount] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
+
+  useEffect(() => {}, [postsChanged]);
 
   const triggerImageUpload = () => {
     imageUploadRef.current.click();
@@ -38,7 +41,7 @@ function UserProfileHeader() {
     if (profilePicture) {
       handleProfileImageUpload(profilePicture);
     }
-  }, [profilePicture]); // TODO: Profile pic show
+  }, [profilePicture]);
 
   useEffect(() => {
     const setUserInfo = async () => {
@@ -61,14 +64,20 @@ function UserProfileHeader() {
       }
     };
     setUserInfo();
-  }, []);
+  }, [postsChanged]);
 
   return (
     <div className="profile d-flex">
       <ToastContainer />
       <aside>
         {profilePicture ? (
-          <img src={profilePicture} onClick={triggerImageUpload} />
+          <img
+            src={profilePicture}
+            onClick={triggerImageUpload}
+            onError={() => {
+              setProfilePicture(null);
+            }}
+          />
         ) : (
           <img src={default_user} onClick={triggerImageUpload} />
         )}
@@ -108,3 +117,7 @@ function UserProfileHeader() {
 }
 
 export default UserProfileHeader;
+
+UserProfileHeader.propTypes = {
+  postsChanged: PropTypes.bool,
+};

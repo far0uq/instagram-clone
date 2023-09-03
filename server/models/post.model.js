@@ -4,11 +4,6 @@ const { Schema } = mongoose;
 
 const PostSchema = new Schema(
   {
-    post_id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     created_at: {
       type: Date,
       required: true,
@@ -21,11 +16,6 @@ const PostSchema = new Schema(
     ],
     images: [
       {
-        image_id: {
-          type: String,
-          required: true,
-          unique: true,
-        },
         image_url: {
           type: String,
           required: true,

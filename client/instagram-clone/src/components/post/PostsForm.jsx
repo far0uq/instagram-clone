@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import back_icon from "../../assets/icons/arrow_icon30.png";
 import empty_form_icon from "../../assets/icons/emptyform_icon.png";
 
-function PostsForm({ onClose }) {
+function PostsForm({ onClose, profileRefresh }) {
   const imageUploadRef = useRef(null);
   const [postList, setPostList] = useState(null);
 
@@ -45,12 +45,10 @@ function PostsForm({ onClose }) {
 
   const triggerPostUpload = async () => {
     const data = await handlePostUpload(postList);
-    console.log(
-      "🚀 ~ file: PostsForm.jsx:48 ~ triggerPostUpload ~ data:",
-      data
-    );
     if (data.status === 201) toast.success("Post Made!");
     else toast.error("Could not make post, please try again in a bit.");
+    profileRefresh();
+    console.log(typeof profileRefresh);
     onClose();
   };
 
@@ -127,4 +125,5 @@ export default PostsForm;
 
 PostsForm.propTypes = {
   onClose: PropTypes.func.isRequired,
+  profileRefresh: PropTypes.func.isRequired,
 };

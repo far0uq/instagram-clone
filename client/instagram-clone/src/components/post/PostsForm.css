@@ -72,6 +72,6 @@
 #empty-form-icon {
   height: 80px;
   width: auto;
-  margin-top: 90px;
+  margin: 90px auto auto auto;
   box-sizing: border-box;
 }

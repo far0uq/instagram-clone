@@ -3,6 +3,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const cloudinary = require("../utils/cloudinaryConn.js");
+const cloudinaryBuildURL = require("cloudinary-build-url");
 
 const userController = {
   signup: async (req, res) => {
@@ -151,22 +152,36 @@ const userController = {
   },
   profileImageUpload: async (req, res) => {
     try {
-      const imageToUpload = req.body.image;
+      const newProfilePic = req.body.image;
 
       const { token } = req.params;
       const payload = jwt.decode(token, "f3o2fvmdlleo");
       const emailToFind = payload.email;
-      const uploadedResp = await cloudinary.uploader.upload(imageToUpload, {
+      const user = await User.findOne({ email: emailToFind });
+
+      const oldProfilePictureSecureURL = user.display_picture;
+
+      const uploadedResp = await cloudinary.uploader.upload(newProfilePic, {
         folder: "user_profile_images",
         upload_preset: "user_images",
       });
 
-      const pictureURL = uploadedResp.secure_url;
-      await User.findOneAndUpdate(
-        { email: emailToFind },
-        { display_picture: pictureURL },
-        { new: true }
+      const oldProfilePicture = cloudinaryBuildURL.extractPublicId(
+        oldProfilePictureSecureURL
       );
+
+      cloudinary.uploader.destroy(oldProfilePicture, (error, result) => {
+        if (error) {
+          console.error("Error deleting image:", error);
+        } else {
+          console.log("Image deleted successfully:", result);
+        }
+      });
+
+      const pictureURL = uploadedResp.secure_url;
+      user.display_picture = pictureURL;
+
+      await user.save();
 
       return res.json({ status: 201, message: "Image Uploaded Successfully" });
     } catch (err) {
