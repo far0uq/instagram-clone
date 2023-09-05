@@ -1,0 +1,38 @@
+.add-post-button {
+  border: 1px solid white;
+  padding: 10px 0px;
+  background-color: transparent;
+  color: white;
+  border-radius: 2%;
+  margin: 40px auto;
+  width: 100%;
+}
+
+.add-post-button:hover {
+  border-color: black;
+  color: black;
+  background-color: white;
+}
+
+.user-post-section {
+  text-align: center;
+  margin: auto;
+  width: 55%;
+}
+
+.images-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.post-image {
+  width: 14vw;
+  height: 14vw;
+  margin-bottom: 25px;
+  object-fit: cover;
+}
+
+.post-image:hover {
+  filter: brightness(70%) saturate(50%);
+}

@@ -1,0 +1,77 @@
+.post-form {
+  position: absolute;
+  width: 68%;
+  background-color: rgba(38, 38, 38, 255);
+  top: 30%;
+  left: 18%;
+  border-radius: 2%;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.post-form > h1 {
+  color: white;
+  font-size: 14px;
+  padding-top: 14px;
+}
+
+.post-form > hr {
+  color: rgb(177, 177, 177);
+}
+
+.post-button {
+  font-size: 11px;
+  border-radius: 3%;
+  border: none;
+}
+
+.post-form .select-button {
+  color: white;
+  padding: 0px 25px;
+  background-color: rgb(0, 162, 255);
+}
+
+.post-form .submit-button {
+  color: rgb(0, 162, 255);
+  background-color: transparent;
+}
+
+.post-images {
+  padding: 40px 0px;
+}
+
+.post-images > img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.post-images > img:hover {
+  filter: brightness(70%) saturate(50%);
+}
+
+.button-section {
+  width: 40%;
+  padding: 20px;
+  margin: auto;
+}
+
+.button-section img {
+  margin: 12px;
+  height: 25px;
+  width: auto;
+}
+
+#empty-form-icon {
+  height: 80px;
+  width: auto;
+  margin: 90px auto auto auto;
+  box-sizing: border-box;
+}

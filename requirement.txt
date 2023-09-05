@@ -17,10 +17,13 @@ Dependencies:
 3. express -> backend node framework
 4. express-validator -> sanitize inputs etc.
 5. config -> easily manage global config data
-6. passport & JWT -> authentication
-7. cloudinary -> image storage
+6. passport.js -> authentication middleware
+7. JWT -> mechanism for authentication
+9. dotenv -> for loading configuration data from .env
+10. Bootstrap -> Styling
 
 DevDependencies:
 
 1. nodemon -> keeps watching our server [No need to install as included in node v18, --watch]
 2. concurrently -> run backend and frontend server at the same time.
+8. cloudinary -> image storage

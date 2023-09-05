@@ -1,0 +1,45 @@
+.logo {
+  width: 40%;
+  height: auto;
+  margin: 40px auto;
+  box-sizing: border-box;
+}
+
+.main-body {
+  background-color: black;
+  height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.main-body aside ul {
+  padding-left: 0px;
+  list-style-type: none;
+}
+
+.main-body aside ul li:last-child {
+  margin-top: 767px;
+}
+
+.main-body > aside {
+  border-right: 1px rgb(51, 51, 51) solid;
+  padding-left: 40px;
+  height: 100%;
+  box-sizing: border-box;
+  position: fixed;
+}
+
+.aside-element {
+  margin-bottom: 20px;
+}
+
+.aside-element > span {
+  color: white;
+}
+
+.aside-element > img {
+  width: 26px;
+  margin-right: 17px;
+  height: auto;
+  box-sizing: border-box;
+}

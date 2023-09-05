@@ -1,0 +1,31 @@
+#CLIENT
+# Logs
+client/instagram-clone/logs
+client/instagram-clone/*.log
+client/instagram-clone/npm-debug.log*
+client/instagram-clone/yarn-debug.log*
+client/instagram-clone/yarn-error.log*
+client/instagram-clone/pnpm-debug.log*
+client/instagram-clone/lerna-debug.log*
+
+client/instagram-clone/node_modules/
+client/instagram-clone/dist
+client/instagram-clone/dist-ssr
+client/instagram-clone/*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# SERVER
+server/node_modules/
+
+#OTHER
+requirement.txt
