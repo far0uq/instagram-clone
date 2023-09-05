@@ -1,15 +1,39 @@
 import instagram_logo from "../../assets/instagram_logo_white.png";
 import home_logo from "../../assets/icons/home_icon24.png";
 import search_logo from "../../assets/icons/search_icon50.png";
-import { navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./MainPage.css";
 import UserProfilePage from "../profile/UserProfilePage";
+import SearchMenu from "../../components/search/SearchMenu";
+import { useState } from "react";
 
 function MainPage() {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [userChanged, setUserChanged] = useState(true);
+  const navigate = useNavigate();
+
   const logoutUser = () => {
     localStorage.setItem("token", "");
     navigate("/accounts/login");
+  };
+
+  const searchToggle = () => {
+    searchOpen ? setSearchOpen(false) : setSearchOpen(true);
+  };
+
+  const refreshUser = () => {
+    userChanged ? setUserChanged(false) : setUserChanged(true);
+  };
+
+  const switchProfile = () => {
+    refreshUser();
+  };
+
+  const onLoggedUserProfile = () => {
+    const token = localStorage.getItem("token");
+    localStorage.setItem("onProfile", token);
+    refreshUser();
   };
 
   return (
@@ -23,11 +47,11 @@ function MainPage() {
               <img src={home_logo}></img>
               <span>Home</span>
             </li>
-            <li className="aside-element">
+            <li className="aside-element" onClick={searchToggle}>
               <img src={search_logo}></img>
               <span>Search</span>
             </li>
-            <li className="aside-element">
+            <li className="aside-element" onClick={onLoggedUserProfile}>
               <span>Profile</span>
             </li>
             <li className="aside-element">
@@ -35,10 +59,19 @@ function MainPage() {
             </li>
           </ul>
         </aside>
-        <div className="col-2 nav-placeholder"></div>
-        <div className="col-10">
+        {searchOpen ? (
+          <div className="col-2 nav-placeholder"></div>
+        ) : (
+          <div className="col-3 nav-placeholder"></div>
+        )}
+        {searchOpen && (
+          <div className="search-menu col-2">
+            <SearchMenu switchProfile={switchProfile} />
+          </div>
+        )}
+        <div className="col-8">
           <section className="main-content">
-            <UserProfilePage />
+            <UserProfilePage userChanged={userChanged} />
           </section>
           <footer></footer>
         </div>

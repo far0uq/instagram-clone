@@ -5,8 +5,9 @@ import Modal from "../generic/Modal";
 import "./UserPostSection.css";
 import { handleFetchPosts } from "../../api/postAPI";
 import PropTypes from "prop-types";
+import isCurrentUserAccount from "../../helpers/isCurrentUserAccount";
 
-function UserPostSection({ profileRefresh, postsChanged }) {
+function UserPostSection({ profileRefresh, postsChanged, userChanged }) {
   const [postDetailsOpen, setPostDetailsOpen] = useState(false);
   const [postFormOpen, setPostFormOpen] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -15,19 +16,11 @@ function UserPostSection({ profileRefresh, postsChanged }) {
   useEffect(() => {
     const fetchPostsFromAPI = async () => {
       const data = await handleFetchPosts();
-      console.log(
-        "🚀 ~ file: UserPostSection.jsx:14 ~ fetchPostsFromAPI ~ data:",
-        data
-      );
       setPosts(data.posts);
     };
     fetchPostsFromAPI();
     // TODO: Change naming convention of the fetchPost methods to fetch_fromAPI
-  }, [postsChanged]);
-
-  useEffect(() => {
-    console.log(posts);
-  }, [posts]);
+  }, [postsChanged, userChanged]);
 
   const handlePostDetailsOpen = (e) => {
     const post = posts.find(
@@ -37,11 +30,19 @@ function UserPostSection({ profileRefresh, postsChanged }) {
     setPostDetailsOpen(true);
   };
 
+  const isLoggedInAccount = isCurrentUserAccount();
   return (
     <div className="user-post-section">
-      <button className="add-post-button" onClick={() => setPostFormOpen(true)}>
-        +
-      </button>
+      {isLoggedInAccount ? (
+        <button
+          className="add-post-button"
+          onClick={() => setPostFormOpen(true)}
+        >
+          +
+        </button>
+      ) : (
+        <div style={{ marginTop: "50px" }}></div>
+      )}
 
       <section className="images-section">
         {posts.map((post) => {
@@ -78,4 +79,5 @@ export default UserPostSection;
 UserPostSection.propTypes = {
   profileRefresh: PropTypes.func.isRequired,
   postsChanged: PropTypes.bool,
+  userChanged: PropTypes.bool,
 };

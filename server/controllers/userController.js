@@ -60,6 +60,7 @@ const userController = {
     }
   },
   forgotPassword: async (req, res) => {
+    console.log("hi");
     const user = await User.findOne({
       email: req.body.email,
     }).exec();
@@ -228,6 +229,39 @@ const userController = {
       display_picture: user.display_picture,
     });
     // TODO: change the name of the attribute in model from display_picture to profile_picture
+  },
+  searchUsers: async (req, res) => {
+    try {
+      const searchQuery = req.body.searchQuery;
+      const users = await User.find({
+        username: { $regex: searchQuery },
+      });
+
+      return res.json({
+        status: 200,
+        result: users,
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  tokenizeSearchedUser: async (req, res) => {
+    try {
+      const searchedUserToken = jwt.sign(
+        {
+          email: req.body.email,
+          password: req.body.password,
+        },
+        "f3o2fvmdlleo"
+      );
+
+      return res.json({
+        status: 200,
+        searchedUserToken: searchedUserToken,
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 

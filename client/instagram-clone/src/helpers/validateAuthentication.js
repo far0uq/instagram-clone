@@ -1,5 +1,3 @@
-// TODO: also have to make logout func soon so the localStorage is emptied out, so this may work properly.
-
 import { handleTokenValidation } from "../api/userAPI";
 
 export const validateAuthentication = async () => {

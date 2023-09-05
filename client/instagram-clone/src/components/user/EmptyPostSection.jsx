@@ -4,8 +4,9 @@ import "./EmptyPostSection.css";
 import camera_logo from "../../assets/icons/camera_icon50.png";
 import PostsForm from "../post/PostsForm";
 import Modal from "../generic/Modal";
+import PropTypes from "prop-types";
 
-function EmptyPostSection() {
+function EmptyPostSection({ profileRefresh }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,10 +23,17 @@ function EmptyPostSection() {
       </button>
 
       <Modal open={isOpen}>
-        <PostsForm onClose={() => setIsOpen(false)} />
+        <PostsForm
+          onClose={() => setIsOpen(false)}
+          profileRefresh={profileRefresh}
+        />
       </Modal>
     </div>
   );
 }
 
 export default EmptyPostSection;
+
+EmptyPostSection.propTypes = {
+  profileRefresh: PropTypes.func.isRequired,
+};

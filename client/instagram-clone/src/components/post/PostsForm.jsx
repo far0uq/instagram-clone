@@ -7,6 +7,10 @@ import back_icon from "../../assets/icons/arrow_icon30.png";
 import empty_form_icon from "../../assets/icons/emptyform_icon.png";
 
 function PostsForm({ onClose, profileRefresh }) {
+  console.log(
+    "🚀 ~ file: PostsForm.jsx:10 ~ PostsForm ~ profileRefresh:",
+    profileRefresh
+  );
   const imageUploadRef = useRef(null);
   const [postList, setPostList] = useState(null);
 
@@ -125,5 +129,5 @@ export default PostsForm;
 
 PostsForm.propTypes = {
   onClose: PropTypes.func.isRequired,
-  profileRefresh: PropTypes.func.isRequired,
+  profileRefresh: PropTypes.func,
 };

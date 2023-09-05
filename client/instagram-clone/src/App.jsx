@@ -17,7 +17,10 @@ function App() {
     <>
       <Routes>
         <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<MainPage />}></Route>
+          <Route
+            path="/"
+            element={<MainPage isCurrentAccount={false} />}
+          ></Route>
         </Route>
 
         <Route path="/accounts/signup" element={<SignUp />}></Route>

@@ -17,7 +17,7 @@ export async function handlePostUpload(PostToUpload) {
 
 export async function handleFetchPosts() {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("onProfile");
     const response = await axios.get(`${API_URL}/post/post-fetch/${token}`);
     return response.data;
   } catch (err) {
