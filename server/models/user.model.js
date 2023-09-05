@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const mongoostatic = require("mongoosastic");
 
 const { Schema } = mongoose;
 
@@ -12,10 +13,12 @@ const UserSchema = new Schema(
     },
     username: {
       type: String,
+      es_indexed: true,
       required: true,
     },
     fullname: {
       type: String,
+      es_indexed: <true></true>,
       required: true,
     },
     password: {
@@ -47,6 +50,8 @@ const UserSchema = new Schema(
   },
   { collection: "user" }
 );
+
+UserSchema.plugin("mongostatic");
 
 UserSchema.methods.passwordValidate = async function (password) {
   const compareResult = bcrypt.compare(password, this.password);
