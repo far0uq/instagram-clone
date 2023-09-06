@@ -6,6 +6,11 @@ import { ToastContainer } from "react-toastify";
 import PropTypes from "prop-types";
 import isCurrentUserAccount from "../../helpers/isCurrentUserAccount";
 import { setUserInfo } from "../../helpers/setUserInfo";
+import {
+  handleAddFollower,
+  handleFetchFollowStatus,
+  handleRemoveFollower,
+} from "../../api/followAPI";
 
 function UserProfileHeader({
   postsChanged,
@@ -13,15 +18,20 @@ function UserProfileHeader({
   userChanged,
 }) {
   const imageUploadRef = useRef(null);
-  const [followers, setFollowers] = useState("");
-  const [following, setFollowing] = useState("");
+  const [followersCount, setFollowersCount] = useState("");
+  const [followingCount, setFollowingCount] = useState(null);
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
   const [postCount, setPostCount] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
   const [intialRender, setInitialRender] = useState(true);
+  const [following, setFollowing] = useState(null);
 
   useEffect(() => {}, [postsChanged]);
+
+  useEffect(() => {
+    fetchFollowing();
+  }, []);
 
   const triggerImageUpload = () => {
     imageUploadRef.current.click();
@@ -41,6 +51,28 @@ function UserProfileHeader({
     };
   };
 
+  const fetchFollowing = async () => {
+    const loggedInUserToken = localStorage.getItem("token");
+    const currentUserToken = localStorage.getItem("onProfile");
+
+    if (loggedInUserToken !== currentUserToken) {
+      const data = await handleFetchFollowStatus();
+      setFollowing(data.following);
+    }
+  };
+
+  const addFollower = async () => {
+    const data = await handleAddFollower();
+    setFollowing(data.following);
+    setFollowersCount(followersCount + 1);
+  };
+
+  const removeFollower = async () => {
+    const data = await handleRemoveFollower();
+    setFollowing(data.following);
+    setFollowersCount(followersCount - 1);
+  };
+
   useEffect(() => {
     if (profilePicture && !intialRender) {
       handleProfileImageUpload(profilePicture);
@@ -52,8 +84,8 @@ function UserProfileHeader({
       setProfilePicture,
       setUsername,
       setFullname,
-      setFollowers,
-      setFollowing,
+      setFollowersCount,
+      setFollowingCount,
       setPostCount
     );
   }, [postsChanged, userChanged]);
@@ -105,9 +137,19 @@ function UserProfileHeader({
             <li className="d-flex">
               <p>{username}</p>
               {!isLoggedInAccount ? (
-                <div className="follow-section">
-                  <button className="follow-btn">Follow</button>
-                </div>
+                following ? (
+                  <div className="follow-section">
+                    <button className="unfollow-btn" onClick={removeFollower}>
+                      Unfollow
+                    </button>
+                  </div>
+                ) : (
+                  <div className="follow-section">
+                    <button className="follow-btn" onClick={addFollower}>
+                      Follow
+                    </button>
+                  </div>
+                )
               ) : (
                 <div className="follow-section"></div>
               )}
@@ -117,10 +159,10 @@ function UserProfileHeader({
                 <b>{postCount}</b> posts
               </p>
               <p>
-                <b>{followers}</b> followers
+                <b>{followersCount}</b> followers
               </p>
               <p>
-                <b>{following}</b> following
+                <b>{followingCount}</b> following
               </p>
             </li>
             <li>
@@ -147,5 +189,5 @@ export default UserProfileHeader;
 UserProfileHeader.propTypes = {
   postsChanged: PropTypes.bool,
   setPostsExistFromChildren: PropTypes.func,
-  userChanged: PropTypes.bool,
+  userChanged: PropTypes.any,
 };

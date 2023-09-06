@@ -5,8 +5,8 @@ export const setUserInfo = async (
   setProfilePicture,
   setUsername,
   setFullname,
-  setFollowers,
-  setFollowing,
+  setFollowersCount,
+  setFollowingCount,
   setPostCount
 ) => {
   const image_data = await fetchProfilePicture();
@@ -20,8 +20,8 @@ export const setUserInfo = async (
   if (data.status === 200) {
     setUsername(data.username);
     setFullname(data.fullname);
-    setFollowers(data.followers);
-    setFollowing(data.following);
+    setFollowersCount(data.followers);
+    setFollowingCount(data.following);
     setPostCount(data.postCount);
   } else {
     toast.error(data.message);

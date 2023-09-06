@@ -126,7 +126,8 @@ const userController = {
   },
   tokenValidation: async (req, res) => {
     try {
-      const { token } = req.params;
+      const { tokesn } = req.params;
+      console.log("🚀 ~ file: userController.js:130 ~ tokenValidation: ~ token:", token)
 
       const payload = jwt.decode(token, "f3o2fvmdlleo");
 

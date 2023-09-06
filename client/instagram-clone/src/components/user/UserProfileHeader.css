@@ -52,3 +52,14 @@
   font-weight: bolder;
   border-radius: 4px;
 }
+
+.unfollow-btn {
+  background-color: rgb(69, 69, 69);
+  border: none;
+  padding: 4px 14px;
+  font-size: 14px;
+  margin-left: 20px;
+  color: white;
+  font-weight: bolder;
+  border-radius: 4px;
+}

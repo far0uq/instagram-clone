@@ -2,10 +2,14 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_REACT_APP_API_SERVER_URL;
 
 export async function handleTokenValidation(token) {
-  const response = await axios.post(
-    `${API_URL}/user/token-validation/${token}`
-  );
-  return response.data;
+  try {
+    const response = await axios.post(
+      `${API_URL}/user/token-validation/${token}`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error("no");
+  }
 }
 
 export async function handleSignIn(values) {
