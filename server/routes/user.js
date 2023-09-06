@@ -25,4 +25,6 @@ router.post("/search-user", userController.searchUsers);
 
 router.post("/tokenize-searched-user", userController.tokenizeSearchedUser);
 
+router.get("/fetch-user-id/:token", userController.fetchUserId);
+
 module.exports = router;

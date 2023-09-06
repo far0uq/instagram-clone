@@ -24,3 +24,20 @@ export async function handleFetchPosts() {
     throw new Error(err);
   }
 }
+
+export async function handleToggleLike(liked, selectedPostId) {
+  try {
+    const values = {
+      liked: liked,
+      postId: selectedPostId,
+    };
+    const token = localStorage.getItem("token");
+    const response = await axios.post(
+      `${API_URL}/post/toggle-like/${token}`,
+      values
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

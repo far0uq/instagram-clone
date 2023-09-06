@@ -63,6 +63,42 @@ const postController = {
       });
     }
   },
+  likeToggle: async (req, res) => {
+    try {
+      const { token } = req.params;
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
+      const user = await User.findOne({ email: emailToFind });
+
+      if (req.body.liked === true) {
+        const post = await Post.findOneAndUpdate(
+          { _id: req.body.postId },
+          { $push: { liked_by: user._id } },
+          { new: true }
+        );
+        return res.json({
+          status: 200,
+          count: post.liked_by.length,
+        });
+      } else if (req.body.liked === false) {
+        const post = await Post.findOneAndUpdate(
+          { _id: req.body.postId },
+          { $pull: { liked_by: user._id } },
+          { new: true }
+        );
+        return res.json({
+          status: 200,
+          count: post.liked_by.length,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        status: 404,
+        message: "Could not connect to the host.",
+      });
+    }
+  },
 };
 
 module.exports = postController;

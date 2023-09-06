@@ -142,3 +142,13 @@ export async function handleSetSearchedUserToken(email, password) {
     throw new Error("Cannot fetch user info.");
   }
 }
+
+export async function fetchUserId() {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${API_URL}/user/fetch-user-id/${token}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

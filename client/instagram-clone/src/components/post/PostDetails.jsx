@@ -3,19 +3,35 @@ import PropTypes from "prop-types";
 import emptyheart_icon from "../../assets/icons/emptyheart_icon50.png";
 import fullheart_icon from "../../assets/icons/fullheart_icon50.png";
 import cross_icon from "../../assets/icons/cross_icon60.png";
-import { useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { handleToggleLike } from "../../api/postAPI";
+import { fetchUserId } from "../../api/userAPI";
 
 function PostDetails({ onClose, selectedPost }) {
   const [liked, setLiked] = useState(false);
-  const imgRef = useRef(null);
+  const [likedCount, setLikedCount] = useState(selectedPost.liked_by.length);
 
   const makeLike = () => {
     liked ? setLiked(false) : setLiked(true);
-    liked
-      ? (imgRef.current.src = emptyheart_icon)
-      : (imgRef.current.src = fullheart_icon);
-    console.log(imgRef.current);
   };
+
+  useEffect(() => {
+    const refreshLikeCount = async () => {
+      const data = await fetchUserId();
+      selectedPost.liked_by.includes(data.userId)
+        ? setLiked(true)
+        : setLiked(false);
+    };
+    refreshLikeCount();
+  }, []);
+
+  useEffect(() => {
+    const toggleLike = async () => {
+      const data = await handleToggleLike(liked, selectedPost._id);
+      setLikedCount(data.count);
+    };
+    toggleLike();
+  }, [liked]);
 
   return (
     <>
@@ -33,7 +49,12 @@ function PostDetails({ onClose, selectedPost }) {
             <h2>Start the conversation</h2>
           </div>
           <div className="likes-section">
-            <img onClick={makeLike} ref={imgRef} src={emptyheart_icon}></img>
+            {liked ? (
+              <img onClick={makeLike} src={fullheart_icon}></img>
+            ) : (
+              <img onClick={makeLike} src={emptyheart_icon}></img>
+            )}
+            <p>{likedCount} Likes</p>
           </div>
           <div className="comment-form">
             <form>

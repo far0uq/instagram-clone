@@ -263,6 +263,19 @@ const userController = {
       throw new Error(error);
     }
   },
+  fetchUserId: async (req,res) => {
+    const { token } = req.params;
+    const payload = jwt.decode(token, "f3o2fvmdlleo");
+    const emailToFind = payload.email;
+    const user = await User.findOne({
+      email: emailToFind,
+    }).exec();
+
+    return res.json({
+      status: 200,
+      userId: user._id,
+    });
+  }
 };
 
 module.exports = userController;

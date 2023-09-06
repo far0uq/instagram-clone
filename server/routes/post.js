@@ -7,4 +7,6 @@ router.post("/post-upload/:token", postController.postUpload);
 
 router.get("/post-fetch/:token", postController.postFetch);
 
+router.post("/toggle-like/:token", postController.likeToggle);
+
 module.exports = router;
