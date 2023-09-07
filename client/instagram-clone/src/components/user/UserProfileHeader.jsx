@@ -27,8 +27,6 @@ function UserProfileHeader({
   const [intialRender, setInitialRender] = useState(true);
   const [following, setFollowing] = useState(null);
 
-  useEffect(() => {}, [postsChanged]);
-
   useEffect(() => {
     fetchFollowing();
   }, []);
@@ -185,9 +183,8 @@ function UserProfileHeader({
 }
 
 export default UserProfileHeader;
-
 UserProfileHeader.propTypes = {
-  postsChanged: PropTypes.bool,
+  postsChanged: PropTypes.any,
   setPostsExistFromChildren: PropTypes.func,
   userChanged: PropTypes.any,
 };

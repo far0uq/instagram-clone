@@ -41,3 +41,15 @@ export async function handleToggleLike(liked, selectedPostId) {
     throw new Error(err);
   }
 }
+
+export async function handleDeletePost(selectedPostId) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.delete(
+      `${API_URL}/post/post-delete/${selectedPostId}?token=${token}`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

@@ -45,11 +45,14 @@ function UserPostSection({ profileRefresh, postsChanged, userChanged }) {
       )}
 
       <section className="images-section">
-        {posts.map((post) => {
+        {posts.map((post, index) => {
+          const addLeftMargin = index % 3 === 1 || index % 3 === 2;
           return (
             <img
               onClick={handlePostDetailsOpen}
-              className="post-image"
+              className={`post-image ${
+                addLeftMargin ? "image-left-margin" : ""
+              }`}
               key={post._id}
               src={post.images[0].image_url}
             />
@@ -61,6 +64,7 @@ function UserPostSection({ profileRefresh, postsChanged, userChanged }) {
         <PostsDetails
           onClose={() => setPostDetailsOpen(false)}
           selectedPost={selectedPost}
+          profileRefresh={profileRefresh}
         />
       </Modal>
 

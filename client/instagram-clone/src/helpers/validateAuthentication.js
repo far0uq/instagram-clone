@@ -1,8 +1,7 @@
 import { handleTokenValidation } from "../api/userAPI";
 
 export const validateAuthentication = async () => {
-  const token = localStorage.getItem("token");
-  const data = await handleTokenValidation(token);
+  const data = await handleTokenValidation();
   if (data.status === 200) return true;
   return false;
 };

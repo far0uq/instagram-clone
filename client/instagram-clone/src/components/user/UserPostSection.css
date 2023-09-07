@@ -25,16 +25,19 @@
 .images-section {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .post-image {
-  width: 14vw;
-  height: 14vw;
+  width: 14.55vw;
+  height: 14.55vw;
   margin-bottom: 25px;
   object-fit: cover;
 }
 
 .post-image:hover {
   filter: brightness(70%) saturate(50%);
+}
+
+.image-left-margin {
+  margin-left: 1.3vw;
 }

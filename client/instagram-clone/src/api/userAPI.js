@@ -1,14 +1,15 @@
 import axios from "axios";
 const API_URL = import.meta.env.VITE_REACT_APP_API_SERVER_URL;
 
-export async function handleTokenValidation(token) {
+export async function handleTokenValidation() {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `${API_URL}/user/token-validation/${token}`
     );
     return response.data;
   } catch (err) {
-    throw new Error("no");
+    throw new Error(err);
   }
 }
 
@@ -150,6 +151,7 @@ export async function handleSetSearchedUserToken(email, password) {
 export async function fetchUserId() {
   try {
     const token = localStorage.getItem("token");
+    console.log("refresh");
     const response = await axios.get(`${API_URL}/user/fetch-user-id/${token}`);
     return response.data;
   } catch (err) {

@@ -1,0 +1,23 @@
+.comment img {
+  width: 25px;
+  height: 25px;
+}
+
+.comment h6 {
+  font-weight: bolder;
+  color: white;
+}
+
+.comment .comment-content {
+  color: white;
+  text-align: left;
+}
+
+.comment .comment-age {
+  color: gray;
+}
+
+.comment .comment-likes {
+  color: gray;
+  font-weight: bolder;
+}

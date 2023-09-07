@@ -19,8 +19,17 @@
 
 .comment-section {
   border-bottom: 1px solid rgb(51, 51, 51);
-  height: 80vh;
+  height: 73vh;
 }
+
+.comment-section h1 {
+  font-size: 25px;
+  font-weight: bolder;
+}
+.comment-section h2 {
+  font-size: 18px;
+}
+
 .likes-section {
   border-bottom: 1px solid rgb(51, 51, 51);
 }
@@ -57,4 +66,19 @@
 .close-btn img {
   width: 30px;
   height: 30px;
+}
+
+.post-options {
+  margin-top: 20px;
+}
+
+.post-options button {
+  background-color: transparent;
+  border: none;
+}
+.post-options button:nth-child(1) {
+  color: grey;
+}
+.post-options button:nth-child(2) {
+  color: red;
 }
