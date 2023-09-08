@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
+const Comment = require("../models/comment.model");
 const cloudinary = require("../utils/cloudinaryConn.js");
+const cloudinaryBuildURL = require("cloudinary-build-url");
 
 const postController = {
   postUpload: async (req, res) => {
@@ -25,8 +27,7 @@ const postController = {
         liked_by: [],
         images: postImages,
       });
-      // TODO: tweak api so that saving profile picture deletes previous one from cloudinary
-      const { token } = req.params;
+      const token = req.headers["authorization"].slice(7);
       const payload = jwt.decode(token, "f3o2fvmdlleo");
       const emailToFind = payload.email;
       await User.findOneAndUpdate(
@@ -49,7 +50,10 @@ const postController = {
       const { token } = req.params;
       const payload = jwt.decode(token, "f3o2fvmdlleo");
       const emailToFind = payload.email;
-      const user = await User.findOne({ email: emailToFind }).populate("posts");
+      const user = await User.findOne({ email: emailToFind.trim() }).populate(
+        "posts"
+      );
+
       const posts = user.posts;
       return res.json({
         status: 200,
@@ -65,7 +69,7 @@ const postController = {
   },
   likeToggle: async (req, res) => {
     try {
-      const { token } = req.params;
+      const token = req.headers["authorization"].slice(7);
       const payload = jwt.decode(token, "f3o2fvmdlleo");
       const emailToFind = payload.email;
       const user = await User.findOne({ email: emailToFind });
@@ -97,6 +101,57 @@ const postController = {
         status: 404,
         message: "Could not connect to the host.",
       });
+    }
+  },
+  postDelete: async (req, res) => {
+    try {
+      const { selectedPostId } = req.params;
+
+      const post = await Post.findOne({
+        _id: selectedPostId,
+      }).exec();
+
+      const images = post.images;
+
+      images.forEach((image) => {
+        const imagePublicId = cloudinaryBuildURL.extractPublicId(
+          image.image_url
+        );
+
+        cloudinary.uploader.destroy(imagePublicId, (error, result) => {
+          if (error) {
+            console.error("Error deleting image:", error);
+          } else {
+            console.log("Image deleted successfully:", result);
+          }
+        });
+      });
+
+      const comments = post.comments;
+
+      comments.forEach(async (comment) => {
+        await Comment.findByIdAndDelete({
+          _id: comment._id,
+        });
+      });
+
+      const token = req.headers["authorization"].slice(7);
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
+      const user = await User.findOne({ email: emailToFind });
+
+      await User.findOneAndUpdate(
+        { email: user.email },
+        { $pull: { posts: selectedPostId } }
+      );
+
+      await Post.findByIdAndDelete(selectedPostId);
+
+      return res.json({
+        status: 200,
+      });
+    } catch (err) {
+      return res.json({ status: 404, msg: err });
     }
   },
 };

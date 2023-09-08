@@ -49,7 +49,7 @@ function ResetPasswordPage() {
           if (await handleResetPassword(values, token)) {
             toast.success("Password reset successfully.");
             setTimeout(() => {
-              navigate("/login");
+              navigate("/accounts/login");
             }, 2000);
           }
         } else toast.error("Passwords don't match.");

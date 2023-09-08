@@ -112,6 +112,7 @@ function PostDetails({ onClose, selectedPost, profileRefresh }) {
                 return (
                   <Comment
                     key={comment._id}
+                    commentId={comment._id}
                     createdByUsername={comment.created_by.username}
                     createdAt={comment.created_at}
                     commentContent={comment.comment_content}

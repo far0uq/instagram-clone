@@ -18,127 +18,167 @@ const userController = {
           username: req.body.username,
           fullname: req.body.fullname,
           password: req.body.password,
-        });
-        return res.json({ status: 201, message: "User created successfully." });
+        })
+          .then((createdUser) => {
+            let token = jwt.sign(
+              {
+                email: createdUser.email,
+                password: createdUser.password,
+              },
+              "f3o2fvmdlleo"
+            );
+            return res.json({
+              status: 201,
+              message: "User created successfully.",
+              user: token,
+            });
+          })
+          .catch((error) => {
+            res.status(400);
+          });
       }
     } catch (err) {
       return res.json({ status: 500, message: "Internal Server Error." });
     }
   },
   login: async (req, res) => {
-    const user = await User.findOne({
-      email: req.body.email,
-    }).exec();
+    try {
+      const user = await User.findOne({
+        email: req.body.email,
+      }).exec();
 
-    if (user) {
-      const compare = await user.passwordValidate(req.body.password);
-      if (compare) {
-        const token = jwt.sign(
-          {
-            email: user.email,
-            password: user.password,
-          },
-          "f3o2fvmdlleo"
-        );
+      if (user) {
+        const compare = await user.passwordValidate(req.body.password);
+        if (compare) {
+          const token = jwt.sign(
+            {
+              email: user.email,
+              password: user.password,
+            },
+            "f3o2fvmdlleo"
+          );
+          return res.json({
+            status: 200,
+            user: token,
+            message: "User logged in successfully.",
+          });
+        }
         return res.json({
-          status: 200,
-          user: token,
-          message: "User logged in successfully.",
+          status: 400,
+          user: false,
+          message: "Invalid Password.",
+        });
+      } else {
+        return res.json({
+          status: 400,
+          user: false,
+          message: "User does not exist.",
         });
       }
+    } catch {
       return res.json({
-        status: 400,
+        status: 404,
         user: false,
-        message: "Invalid Password.",
-      });
-    } else {
-      return res.json({
-        status: 400,
-        user: false,
-        message: "User does not exist.",
+        message: "Could not reach server",
       });
     }
   },
   forgotPassword: async (req, res) => {
-    console.log("hi");
-    const user = await User.findOne({
-      email: req.body.email,
-    }).exec();
+    try {
+      const user = await User.findOne({
+        email: req.body.email,
+      }).exec();
 
-    if (user) {
-      var transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        service: "gmail",
-        auth: {
-          user: "farooqhaider561@gmail.com",
-          pass: "ofdumairqladpzmq",
-        },
+      if (user) {
+        var transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          service: "gmail",
+          auth: {
+            user: "farooqhaider561@gmail.com",
+            pass: "ofdumairqladpzmq",
+          },
+        });
+
+        const token = jwt.sign({ email: req.body.email }, "f3o2fvmdlleo");
+        const encodedJwt = encodeURIComponent(token);
+
+        var mailOptions = {
+          from: "farooqhaider561@gmail.com",
+          to: user.email,
+          subject: "Reset your Password - Instagram",
+          text: `http://127.0.0.1:5173/reset-password/${encodedJwt}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("SENT SUCCESSFUL " + info.response);
+          }
+        });
+
+        res.json({ status: 200, message: "Recovery email sent successfully." });
+      } else {
+        res.json({ status: 400, message: "Provided email is invalid." });
+      }
+    } catch {
+      return res.json({
+        status: 404,
+        message: "Could not connect to email service",
       });
-
-      // transporter.verify(function (error, success) {
-      //   if (error) {
-      //     console.log(error.message);
-      //   } else {
-      //     console.log("Server is ready to take our messages");
-      //   }
-      // });
-
-      const token = jwt.sign({ email: req.body.email }, "f3o2fvmdlleo");
-      const encodedJwt = encodeURIComponent(token);
-
-      var mailOptions = {
-        from: "farooqhaider561@gmail.com",
-        to: user.email,
-        subject: "Reset your Password - Instagram",
-        text: `http://127.0.0.1:5173/reset-password/${encodedJwt}`,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("SENT SUCCESSFUL " + info.response);
-        }
-      });
-
-      res.json({ status: 200, message: "Recovery email sent successfully." });
-    } else {
-      res.json({ status: 400, message: "Provided email is invalid." });
     }
   },
   resetPassword: async (req, res) => {
-    const { token } = req.params;
-    const payload = jwt.decode(token, "f3o2fvmdlleo");
-    const emailToFind = payload.email;
-    const newPasswordValue = await bcrypt.hash(req.body.password, 10);
+    try {
+      const { token } = req.params;
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
+      const newPasswordValue = await bcrypt.hash(req.body.password, 10);
 
-    const user = await User.findOneAndUpdate(
-      { email: emailToFind },
-      { password: newPasswordValue },
-      { new: true }
-    );
-    if (user) {
-      return res.json({ status: 200, message: "Password successfully reset." });
-    } else {
-      return res.json({ status: 400, message: "Password could not be reset." });
+      const user = await User.findOneAndUpdate(
+        { email: emailToFind },
+        { password: newPasswordValue },
+        { new: true }
+      );
+      if (user) {
+        return res.json({
+          status: 200,
+          message: "Password successfully reset.",
+        });
+      } else {
+        return res.json({
+          status: 400,
+          message: "Password could not be reset.",
+        });
+      }
+    } catch {
+      return res.json({
+        status: 401,
+        msg: "Password could not be reset",
+      });
     }
   },
   tokenValidation: async (req, res) => {
     try {
-      const { tokesn } = req.params;
-      console.log("🚀 ~ file: userController.js:130 ~ tokenValidation: ~ token:", token)
+      const rawToken = req.headers["authorization"];
+      if (rawToken) {
+        const token = req.headers["authorization"].slice(7);
 
-      const payload = jwt.decode(token, "f3o2fvmdlleo");
+        const payload = jwt.decode(token, "f3o2fvmdlleo");
+        const emailToFind = payload.email;
+        const user = await User.findOne({
+          email: emailToFind,
+        }).exec();
 
-      const emailToFind = payload.email;
-
-      const user = await User.findOne({
-        email: emailToFind,
-      }).exec();
-
-      if (user) {
-        return res.json({ status: 200, message: "User has been found." });
+        if (user) {
+          return res.json({ status: 200, message: "User has been found." });
+        } else {
+          return res.json({
+            status: 401,
+            message: "Could not validate user, entry prohibitted.",
+          });
+        }
       } else {
         return res.json({
           status: 401,
@@ -156,7 +196,7 @@ const userController = {
     try {
       const newProfilePic = req.body.image;
 
-      const { token } = req.params;
+      const token = req.headers["authorization"].slice(7).slice(7);
       const payload = jwt.decode(token, "f3o2fvmdlleo");
       const emailToFind = payload.email;
       const user = await User.findOne({ email: emailToFind });
@@ -218,17 +258,24 @@ const userController = {
     }
   },
   fetchProfilePicture: async (req, res) => {
-    const { token } = req.params;
-    const payload = jwt.decode(token, "f3o2fvmdlleo");
-    const emailToFind = payload.email;
-    const user = await User.findOne({
-      email: emailToFind,
-    }).exec();
+    try {
+      const { token } = req.params;
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
+      const user = await User.findOne({
+        email: emailToFind,
+      }).exec();
 
-    return res.json({
-      status: 200,
-      display_picture: user.display_picture,
-    });
+      return res.json({
+        status: 200,
+        display_picture: user.display_picture,
+      });
+    } catch (err) {
+      return res.json({
+        status: 404,
+      });
+    }
+
     // TODO: change the name of the attribute in model from display_picture to profile_picture
   },
   searchUsers: async (req, res) => {
@@ -264,19 +311,25 @@ const userController = {
       throw new Error(error);
     }
   },
-  fetchUserId: async (req,res) => {
-    const { token } = req.params;
-    const payload = jwt.decode(token, "f3o2fvmdlleo");
-    const emailToFind = payload.email;
-    const user = await User.findOne({
-      email: emailToFind,
-    }).exec();
+  fetchUserId: async (req, res) => {
+    try {
+      const token = req.headers["authorization"].slice(7);
+      const payload = jwt.decode(token, "f3o2fvmdlleo");
+      const emailToFind = payload.email;
+      const user = await User.findOne({
+        email: emailToFind,
+      }).exec();
 
-    return res.json({
-      status: 200,
-      userId: user._id,
-    });
-  }
+      return res.json({
+        status: 200,
+        userId: user._id,
+      });
+    } catch {
+      return res.json({
+        status: 400,
+      });
+    }
+  },
 };
 
 module.exports = userController;

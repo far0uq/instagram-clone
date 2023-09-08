@@ -9,6 +9,7 @@ import empty_form_icon from "../../assets/icons/emptyform_icon.png";
 function PostsForm({ onClose, profileRefresh }) {
   const imageUploadRef = useRef(null);
   const [postList, setPostList] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const triggerImageWindow = () => {
     imageUploadRef.current.click();
@@ -44,12 +45,14 @@ function PostsForm({ onClose, profileRefresh }) {
   // TODO: Fix why change in state is not causing a re-render
 
   const triggerPostUpload = async () => {
+    setIsSubmitting(true);
     const data = await handlePostUpload(postList);
     if (data.status === 201) toast.success("Post Made!");
     else toast.error("Could not make post, please try again in a bit.");
     profileRefresh();
     console.log(typeof profileRefresh);
     onClose();
+    setIsSubmitting(true);
   };
 
   const blankifyImageSelect = (event) => {
@@ -90,18 +93,32 @@ function PostsForm({ onClose, profileRefresh }) {
         </section>
 
         <section className="button-section d-flex justify-content-between">
-          <div onClick={onClose}>
-            <img src={back_icon}></img>
-          </div>
-          <button
-            className="select-button post-button"
-            onClick={triggerImageWindow}
-          >
-            Select from Computer
-          </button>
+          {isSubmitting ? (
+            <div>
+              <img src={back_icon}></img>
+            </div>
+          ) : (
+            <div onClick={onClose}>
+              <img src={back_icon}></img>
+            </div>
+          )}
+          {isSubmitting ? (
+            <button className="select-button post-button">
+              Submitting Post...
+            </button>
+          ) : (
+            <button
+              className="select-button post-button"
+              onClick={triggerImageWindow}
+            >
+              Select from Computer
+            </button>
+          )}
           <button
             className="post-button submit-button"
             onClick={triggerPostUpload}
+            disabled={isSubmitting}
+            style={{ color: isSubmitting ? "gray" : "white" }}
           >
             Post
           </button>

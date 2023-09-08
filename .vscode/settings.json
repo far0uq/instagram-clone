@@ -8,7 +8,7 @@
     "**/Thumbs.db": true,
     "server/node_modules": true,
     "server/*.json": true,
-    "**/package.json": false,
+    "**/package.json": true,
     "server/package.json": true,
     "requirement.txt": true,
     "**/README.md": true,

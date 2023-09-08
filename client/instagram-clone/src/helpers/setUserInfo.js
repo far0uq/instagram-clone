@@ -9,14 +9,14 @@ export const setUserInfo = async (
   setFollowingCount,
   setPostCount
 ) => {
-  const image_data = await fetchProfilePicture();
+  let image_data = await fetchProfilePicture();
   if (image_data.status === 200) {
     setProfilePicture(image_data.display_picture);
   } else {
-    toast.error(data.message);
+    toast.error(image_data.message);
   }
 
-  const data = await fetchProfileInfo();
+  let data = await fetchProfileInfo();
   if (data.status === 200) {
     setUsername(data.username);
     setFullname(data.fullname);

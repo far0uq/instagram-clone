@@ -31,6 +31,7 @@ function SignIn() {
     }),
     onSubmit: async (values) => {
       if (await handleSignIn(values)) {
+        localStorage.setItem("auth", true);
         toast.success("Login Successful.");
         navigate("/");
       } else {

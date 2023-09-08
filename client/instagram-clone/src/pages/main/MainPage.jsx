@@ -14,7 +14,8 @@ function MainPage() {
   const navigate = useNavigate();
 
   const logoutUser = () => {
-    localStorage.setItem("token", "");
+    localStorage.removeItem("token");
+    localStorage.setItem("auth", false);
     navigate("/accounts/login");
   };
 

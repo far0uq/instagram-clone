@@ -1,14 +1,9 @@
-import axios from "axios";
-const API_URL = import.meta.env.VITE_REACT_APP_API_SERVER_URL;
+import { axiosConfig } from "../utils/axiosConfig";
 
 export async function handlePostUpload(PostToUpload) {
   try {
-    const token = localStorage.getItem("token");
     const values = { post: PostToUpload };
-    const response = await axios.post(
-      `${API_URL}/post/post-upload/${token}`,
-      values
-    );
+    const response = await axiosConfig.post(`/post/post-upload`, values);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -18,7 +13,7 @@ export async function handlePostUpload(PostToUpload) {
 export async function handleFetchPosts() {
   try {
     const token = localStorage.getItem("onProfile");
-    const response = await axios.get(`${API_URL}/post/post-fetch/${token}`);
+    const response = await axiosConfig.get(`/post/post-fetch/${token}`);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -31,11 +26,7 @@ export async function handleToggleLike(liked, selectedPostId) {
       liked: liked,
       postId: selectedPostId,
     };
-    const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `${API_URL}/post/toggle-like/${token}`,
-      values
-    );
+    const response = await axiosConfig.post(`/post/toggle-like`, values);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -44,10 +35,7 @@ export async function handleToggleLike(liked, selectedPostId) {
 
 export async function handleDeletePost(selectedPostId) {
   try {
-    const token = localStorage.getItem("token");
-    const response = await axios.delete(
-      `${API_URL}/post/post-delete/${selectedPostId}?token=${token}`
-    );
+    const response = await axiosConfig.delete(`/post/post-delete/${selectedPostId}`);
     return response.data;
   } catch (err) {
     throw new Error(err);

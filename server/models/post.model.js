@@ -22,6 +22,12 @@ const PostSchema = new Schema(
         },
       },
     ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "comment",
+      },
+    ],
   },
   { collection: "post" }
 );
